@@ -77,7 +77,6 @@ class _QRCodeScannerAppState extends State<QRCodeScannerApp> {
 
   Barcode? result;
   QRViewController? controller;
-  @override
   final GlobalKey qrkey = GlobalKey(debugLabel: 'QrScanner');
   @override
   Widget build(BuildContext context) {
