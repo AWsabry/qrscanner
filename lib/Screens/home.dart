@@ -20,40 +20,6 @@ class _QRCodeScannerAppState extends State<QRCodeScannerApp> {
     super.initState();
   }
 
-  // Future<String> get _localPath async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   log(directory.path);
-  //   return directory.path;
-  // }
-
-  // Future<File> get _localFile async {
-  //   final path = await _localPath;
-  //   return File('$path/counter.txt');
-  // }
-
-  // Future<String> readCounter() async {
-  //   try {
-  //     final file = await _localFile;
-  //     final contents = await file.readAsString();
-  //     return contents;
-  //   } catch (e) {
-  //     return "Error reading counter: $e";
-  //   }
-  // }
-
-  // Future<String> writeCounter(String counter) async {
-  //   final file = await _localFile;
-  //   log("data has been saved");
-  //   log(counter);
-  //   log("data has been saved to this path $_localPath");
-  //   file.writeAsString(counter);
-  //   data = await readCounter();
-  //   setState(() {});
-  //   return data!;
-
-  //   // return file.writeAsString(counter);
-  // }
-
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
 
@@ -68,13 +34,11 @@ class _QRCodeScannerAppState extends State<QRCodeScannerApp> {
     try {
       if (await _requestPermission()) {
         String fileName = 'scanned_data.txt';
-        String filePath = await _getFilePath(fileName).then((value) {
-          return value;
-          // log(value);
-        });
+        String filePath = "/storage/emulated/0/Download/$fileName";
         File file = File(filePath);
 
         await file.writeAsString(result!.code.toString()).then((value) {
+          log(value.path);
           log('File downloaded successfully as $fileName');
         });
       } else {
@@ -93,10 +57,6 @@ class _QRCodeScannerAppState extends State<QRCodeScannerApp> {
       var result = await Permission.storage.request();
       return result.isGranted;
     }
-  }
-
-  Future<String> _getFilePath(String fileName) async {
-    return '${"/storage/emulated/0/Download"}/$fileName';
   }
 
   @override
@@ -147,7 +107,6 @@ class _QRCodeScannerAppState extends State<QRCodeScannerApp> {
                 await _downloadScannedData().then((value) {
                   // log(value.toString());
                   log(result!.code.toString());
-                  controller!.pauseCamera();
                 });
               } catch (E) {
                 log(E.toString());
